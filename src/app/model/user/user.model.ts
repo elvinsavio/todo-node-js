@@ -1,17 +1,32 @@
-export default function (sequelize: any, Sequelize: any) {
-  const User = sequelize.define("users", {
+import { DataTypes, Sequelize } from "sequelize";
+import { IUserModel } from "./user.type";
+
+export default function (sequelize: Sequelize) {
+  const User = sequelize.define<IUserModel>("users", {
     id: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     email: {
-      type: Sequelize.STRING,
-      required: true,
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
     password: {
-      type: Sequelize.STRING,
-      required: true,
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: new Date(),
     },
   });
 

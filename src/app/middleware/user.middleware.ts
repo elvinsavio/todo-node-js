@@ -6,7 +6,7 @@ import { createUserSchema } from "../model/user/user.scema";
 import error from "../templates/error";
 
 export default {
-  createUser(req: Request, res: Response, next: Function) {
+  createUser(req: Request, res: Response, next: () => void) {
     const { error: err } = createUserSchema.validate(req.body, joiConfig);
     if (err) {
       error.errorMessage = err.message;

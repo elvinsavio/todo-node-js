@@ -4,7 +4,8 @@ import userMiddleware from "../middleware/user.middleware";
 
 const router = Router();
 
-router.get("/", userMiddleware.createUser, userController.getAllUsers);
+router.get("/", userController.getAllUsers);
+router.get("/:id", userController.getUserById);
 
 router.post("/", userMiddleware.createUser, userController.createUser);
 
