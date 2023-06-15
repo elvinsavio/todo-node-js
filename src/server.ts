@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
+import { SequelizeScopeError } from "sequelize";
 
+import db from "./app/model/model";
+import router from "./app/router/router";
 const app = express();
 
 var corsOptions = {
@@ -15,10 +18,17 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
-});
+app.use("/", router);
+
+db.sequelize
+  .sync()
+  .then(() => {
+    console.clear();
+    console.log("[DB]::Synced db.");
+  })
+  .catch((err: SequelizeScopeError) => {
+    console.error("[DB]::Failed to sync db: " + err.message);
+  });
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

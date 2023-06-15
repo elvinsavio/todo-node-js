@@ -1,5 +1,6 @@
 import dbConfig from "../../config/db.config";
 import { Dialect, Sequelize } from "sequelize";
+import userModel from "./user.model";
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -12,3 +13,12 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     idle: dbConfig.pool.idle,
   },
 });
+
+const db: any = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.User = userModel(sequelize, Sequelize);
+
+export default db;
