@@ -7,6 +7,7 @@ export default function (sequelize: Sequelize) {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
