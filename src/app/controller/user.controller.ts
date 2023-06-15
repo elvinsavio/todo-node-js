@@ -5,7 +5,6 @@ import response from "../templates/response";
 
 export default {
   createUser: (req: Request, res: Response) => {
-    console.log(req.body);
     db.User.create({
       email: req.body.email,
       password: req.body.password,
