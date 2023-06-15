@@ -3,3 +3,7 @@ node_modules
 
 # Mac os
 .DS_Store
+
+
+# Logs 
+logs
