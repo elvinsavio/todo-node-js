@@ -1,7 +1,6 @@
 import dbConfig from "../../config/db.config";
-import { Dialect, Model, ModelCtor, Sequelize } from "sequelize";
+import { Dialect, Sequelize } from "sequelize";
 import userModel from "./user/user.model";
-import { IUserModel } from "./user/user.type";
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
