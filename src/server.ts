@@ -6,7 +6,7 @@ import db from "./app/model/model";
 import router from "./app/router/router";
 const app = express();
 
-var corsOptions = {
+const corsOptions = {
   origin: "http://localhost:8081",
 };
 
@@ -23,6 +23,7 @@ app.use("/", router);
 db.sequelize
   .sync()
   .then(() => {
+    // eslint-disable-next-line no-console
     console.clear();
     console.log("[DB]::Synced db.");
   })
