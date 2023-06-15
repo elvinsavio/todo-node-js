@@ -32,5 +32,3 @@ export default function (sequelize: Sequelize) {
 
   return User;
 }
-
-console.log("test");
