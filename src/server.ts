@@ -22,10 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", router);
 
 db.sequelize
-  .sync()
+  .sync({
+    // force: true,
+  })
   .then(() => {
     // eslint-disable-next-line no-console
-    console.clear();
     infoLogger.info({ label: "DB", message: "Connected to db" });
   })
   .catch((err: SequelizeScopeError) => {

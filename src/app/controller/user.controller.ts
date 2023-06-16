@@ -18,40 +18,72 @@ export default {
 
   getAllUsers: (req: Request, res: Response) => {
     db.User.findAll().then((users) => {
-      res.send(users);
+      response.data = users;
+      res.send(response);
     });
   },
 
   getUserById: (req: Request, res: Response) => {
     db.User.findByPk(req.params.id)
       .then((user) => {
-        res.send(user);
+        if (user === null) throw new Error("User with id [" + req.params.id + "] not found");
+        response.data = user;
+        return res.send(response);
       })
-      .catch(() => {
-        error.errorMessage = "User with id [" + req.params.id + "] not found";
+      .catch((err) => {
+        error.errorMessage = err;
         res.status(500).send(error);
       });
   },
 
-  updateUserById: (req: Request, res: Response) => {
-    db.User.update(
-      {
-        email: req.body.email,
-        password: req.body.password,
-      },
-      {
-        where: {
-          id: req.params.id,
-        },
-      },
-    )
+  updateUser: (req: Request, res: Response) => {
+    db.User.findByPk(req.params.id)
       .then((user) => {
+        if (user === null) {
+          throw new Error("User with id [" + req.params.id + "] not found");
+        }
+        user.update({
+          email: req.body.email,
+          password: req.body.password,
+        });
         response.data = user;
-        res.send(response);
+        return res.send(response);
       })
-      .catch(() => {
-        error.errorMessage = "User with id [" + req.params.id + "] not found";
+      .catch((err) => {
+        error.errorMessage = err;
         res.status(500).send(error);
       });
+  },
+
+  activateUser: (req: Request, res: Response) => {
+    db.User.findByPk(req.params.id).then((user) => {
+      if (user === null) {
+        throw new Error("User with id [" + req.params.id + "] not found");
+      }
+      if (user.active) {
+        throw new Error("User with id [" + req.params.id + "] already active");
+      }
+      user.update({
+        active: true,
+      });
+      response.data = user;
+      return res.send(response);
+    });
+  },
+
+  deactivateUser: (req: Request, res: Response) => {
+    db.User.findByPk(req.params.id).then((user) => {
+      if (user === null) {
+        throw new Error("User with id [" + req.params.id + "] not found");
+      }
+      if (!user.active) {
+        throw new Error("User with id [" + req.params.id + "] already deactivated");
+      }
+      user.update({
+        active: false,
+      });
+      response.data = user;
+      return res.send(response);
+    });
   },
 };
