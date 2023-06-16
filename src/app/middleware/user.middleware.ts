@@ -1,21 +1,21 @@
 import joiConfig from "../../config/joi.config";
 
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { createUserSchema } from "../model/user/user.schema";
 
 import error from "../templates/error";
 
 export default {
-  createUser(req: Request, res: Response, next: () => void) {
+  createUser(req: Request, res: Response, next: NextFunction) {
     const { error: err } = createUserSchema.validate(req.body, joiConfig);
     if (err) {
       error.errorMessage = err.message;
       return res.status(400).send(error);
     }
-    next();
+    return next();
   },
 
-  updateUser(req: Request, res: Response, next: () => void) {
+  updateUser(req: Request, res: Response, next: NextFunction) {
     if (!req.params.id) {
       error.errorMessage = "Missing id";
       return res.send(error);
@@ -25,7 +25,7 @@ export default {
       error.errorMessage = errBody.message;
       return res.status(400).send(error);
     }
-    next();
+    return next();
   },
 
   /**
@@ -33,11 +33,11 @@ export default {
    * If the id is not present, it will return an error response.
    * If the id is present, it will call the next middleware.
    */
-  toggleActive(req: Request, res: Response, next: () => void) {
+  toggleActive(req: Request, res: Response, next: NextFunction) {
     if (!req.params.id) {
       error.errorMessage = "Missing id";
       return res.send(error);
     }
-    next();
+    return next();
   },
 };
