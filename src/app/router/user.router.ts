@@ -33,6 +33,6 @@ router.post("/:id", authMiddleware.verifyToken, userMiddleware.updateUser, userC
  * @description
  * Toggle user active
  */
-router.post("/toggleState/:id", authMiddleware.verifyToken, userMiddleware.toggleActive, userController.toggleUser);
+router.post("/toggle-status/:id", authMiddleware.verifyToken, userMiddleware.toggleActive, userController.toggleUser);
 
 export default router;

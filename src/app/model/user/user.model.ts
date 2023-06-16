@@ -12,6 +12,7 @@ export default function (sequelize: Sequelize) {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     active: {
       type: DataTypes.BOOLEAN,
