@@ -22,6 +22,7 @@ const db = {
   Todo: todoModel(sequelize),
 };
 
+// relations
 db.Todo.belongsTo(db.User, {
   foreignKey: "userId",
   as: "user",
