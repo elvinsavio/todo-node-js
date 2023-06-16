@@ -32,4 +32,26 @@ export default {
         res.status(500).send(error);
       });
   },
+
+  updateUserById: (req: Request, res: Response) => {
+    db.User.update(
+      {
+        email: req.body.email,
+        password: req.body.password,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      },
+    )
+      .then((user) => {
+        response.data = user;
+        res.send(response);
+      })
+      .catch(() => {
+        error.errorMessage = "User with id [" + req.params.id + "] not found";
+        res.status(500).send(error);
+      });
+  },
 };

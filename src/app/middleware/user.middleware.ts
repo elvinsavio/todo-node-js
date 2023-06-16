@@ -14,4 +14,13 @@ export default {
     }
     next();
   },
+
+  updateUser(req: Request, res: Response, next: () => void) {
+    const { error: errBody } = createUserSchema.validate(req.body, joiConfig);
+    if (errBody) {
+      error.errorMessage = errBody.message;
+      return res.status(400).send(error);
+    }
+    next();
+  },
 };
