@@ -27,15 +27,24 @@ export default {
     db.User.create({
       email: req.body.email,
       password: await encrypt.cryptPassword(req.body.password),
-    }).then((user: IUserModel) => {
-      response.data = userObject(user);
-      res.send(response);
-    });
+    })
+      .then((user: IUserModel) => {
+        response.data = { user: userObject(user) };
+        res.send(response);
+      })
+      .catch((err) => {
+        if (err.name === "SequelizeUniqueConstraintError") {
+          error.errorMessage = "Email " + req.body.email + " already exists";
+        } else {
+          error.errorMessage = err;
+        }
+        return res.status(500).send(error);
+      });
   },
 
   getAllUsers: (req: Request, res: Response) => {
     db.User.findAll().then((users) => {
-      response.data = users.map((user) => userObject(user));
+      response.data = { users: users.map((user) => userObject(user)) };
       res.send(response);
     });
   },
@@ -44,7 +53,7 @@ export default {
     db.User.findByPk(req.params.id)
       .then((user) => {
         if (user === null) throw new Error("User with id [" + req.params.id + "] not found");
-        response.data = userObject(user);
+        response.data = { user: userObject(user) };
         return res.send(response);
       })
       .catch((err) => {
@@ -64,7 +73,7 @@ export default {
           password: req.body.password,
           updatedAt: new Date(),
         });
-        response.data = user;
+        response.data = { user };
         return res.send(response);
       })
       .catch((err) => {
@@ -82,7 +91,7 @@ export default {
         active: !user.active,
         updatedAt: new Date(),
       });
-      response.data = userObject(user);
+      response.data = { user: userObject(user) };
       return res.send(response);
     });
   },
