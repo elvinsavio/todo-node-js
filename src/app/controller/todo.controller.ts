@@ -43,6 +43,7 @@ export default {
         if (todo === null) throw new Error("Todo with id [" + req.params.id + "] not found");
         todo.update({
           status: req.body.status,
+          updatedAt: new Date(),
         });
         response.data = { todo };
         return res.send(response);
@@ -51,5 +52,19 @@ export default {
         error.errorMessage = err.message;
         return res.status(400).send(error);
       });
+  },
+
+  updateTodo: (req: Request, res: Response) => {
+    db.Todo.findByPk(req.params.id).then((todo) => {
+      if (todo === null) throw new Error("Todo with id [" + req.params.id + "] not found");
+      todo.update({
+        title: req.body.title,
+        description: req.body.description,
+        endDate: req.body.endDate,
+        updatedAt: new Date(),
+      });
+      response.data = { todo };
+      return res.send(response);
+    });
   },
 };
