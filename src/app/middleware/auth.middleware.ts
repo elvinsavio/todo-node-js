@@ -18,14 +18,15 @@ export default {
       error.errorMessage = "Missing authorization header";
       return res.status(401).send(error);
     }
-    jwt
+    return jwt
       .verify(req.headers.authorization)
-      .then(() => {
+      .then((res) => {
+        req.body.userObject = res.payload;
         return next();
       })
       .catch((err) => {
         error.errorMessage = err.message;
-        res.status(401).send(error);
+        return res.status(401).send(error);
       });
   },
 };
