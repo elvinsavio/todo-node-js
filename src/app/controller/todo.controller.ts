@@ -2,6 +2,17 @@ import { Request, Response } from "express";
 import db from "../model/model";
 import error from "../templates/error";
 import response from "../templates/response";
+import { ITodosModel } from "../model/todo/todo.type";
+
+function createTodo(todo: ITodosModel) {
+  return {
+    id: todo.id,
+    title: todo.title,
+    description: todo.description,
+    status: todo.status,
+    endDate: todo.endDate,
+  };
+}
 
 export default {
   createTodo: (req: Request, res: Response) => {
@@ -12,7 +23,7 @@ export default {
       endDate: req.body.endDate,
     })
       .then((todo) => {
-        res.send(todo);
+        res.send(createTodo(todo));
       })
       .catch((err) => {
         res.status(500).send(err);
@@ -27,7 +38,7 @@ export default {
     })
       .then((todos) => {
         response.data = {
-          todos,
+          todos: todos.map((todo) => createTodo(todo)),
         };
         res.send(response);
       })
@@ -45,7 +56,7 @@ export default {
           status: req.body.status,
           updatedAt: new Date(),
         });
-        response.data = { todo };
+        response.data = { todo: createTodo(todo) };
         return res.send(response);
       })
       .catch((err) => {
@@ -63,7 +74,7 @@ export default {
         endDate: req.body.endDate,
         updatedAt: new Date(),
       });
-      response.data = { todo };
+      response.data = { todo: createTodo(todo) };
       return res.send(response);
     });
   },
