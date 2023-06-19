@@ -6,3 +6,8 @@ export const createTodoScheme = joi.object({
   endDate: joi.date().optional().allow("", null),
   userObject: joi.object(),
 });
+
+export const updateStatusScheme = joi.object({
+  status: joi.string().valid("todo", "doing", "completed").required(),
+  userObject: joi.object(),
+});
