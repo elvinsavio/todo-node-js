@@ -23,14 +23,14 @@ app.use("/", router);
 
 db.sequelize
   .sync({
-    // force: true,
+    force: true,
   })
   .then(() => {
     // eslint-disable-next-line no-console
     infoLogger.info({ label: "DB", message: "Connected to db" });
   })
   .catch((err: SequelizeScopeError) => {
-    errorLogger.error({ label: "DB", message: "Failed to sync db: " + err.message });
+    errorLogger.error({ label: "DB", message: "Failed to sync db: " + err.message + err });
   });
 
 // set port, listen for requests
