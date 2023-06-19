@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../model/model";
 import response from "../templates/response";
+import error from "../templates/error";
 
 export default {
   createTodo: async (req: Request, res: Response) => {
@@ -31,7 +32,8 @@ export default {
         res.send(response);
       })
       .catch((err) => {
-        res.status(500).send(err);
+        error.errorMessage = err.message;
+        res.status(500).send(error);
       });
   },
 };
