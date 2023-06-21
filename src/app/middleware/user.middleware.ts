@@ -1,7 +1,7 @@
 import joiConfig from "../../config/joi.config";
 
 import type { NextFunction, Request, Response } from "express";
-import { createUserSchema } from "../model/user/user.schema";
+import { createUserSchema } from "../schema/user.schema";
 
 import error from "../templates/error";
 

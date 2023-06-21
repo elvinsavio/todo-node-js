@@ -29,10 +29,4 @@ router.post("/", userMiddleware.createUser, userController.createUser);
  */
 router.post("/:id", authMiddleware.verifyToken, userMiddleware.updateUser, userController.updateUser);
 
-/**
- * @description
- * Toggle user active
- */
-router.post("/toggle-status/:id", authMiddleware.verifyToken, userMiddleware.toggleActive, userController.toggleUser);
-
 export default router;

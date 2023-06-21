@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import joiConfig from "../../config/joi.config";
-import { createTodoScheme, updateStatusScheme, updateTodoScheme } from "../model/todo/todo.scheme";
+import { createTodoScheme, updateStatusScheme, updateTodoScheme } from "../schema/todo.scheme";
 import error from "../templates/error";
 
 export default {

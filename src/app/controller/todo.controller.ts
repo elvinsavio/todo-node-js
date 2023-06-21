@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import db from "../model/model";
+import db from "../schema/model";
 import error from "../templates/error";
 import response from "../templates/response";
-import { ITodosModel } from "../model/todo/todo.type";
+import { ITodosModel } from "../schema/todo/todo.type";
 
 function createTodo(todo: ITodosModel) {
   return {
