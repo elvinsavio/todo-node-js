@@ -44,7 +44,7 @@ export default {
         },
       })
       .then((todos) => {
-        response.data = todos.map((todo) => constructTodo(todo));
+        response.data = { todo: todos.map((todo) => constructTodo(todo)) };
         res.send(response);
       });
   },
