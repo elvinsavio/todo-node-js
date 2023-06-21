@@ -1,17 +1,10 @@
 import express from "express";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
 import router from "./app/router/router";
-
-const prisma = new PrismaClient();
 
 const app = express();
 
-const corsOptions = {
-  origin: "http://localhost:8081",
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -24,5 +17,5 @@ app.use("/", router);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log("started");
+  console.log("--started--");
 });

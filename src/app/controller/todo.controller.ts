@@ -1,45 +1,33 @@
-import { Request, Response } from "express";
-import db from "../schema/model";
+import e, { Request, Response } from "express";
 import error from "../templates/error";
 import response from "../templates/response";
-import { ITodosModel } from "../schema/todo/todo.type";
+import type { Todo } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-function createTodo(todo: ITodosModel) {
+const prisma = new PrismaClient();
+
+function constructTodo(todo: Todo) {
   return {
     id: todo.id,
     title: todo.title,
-    description: todo.description,
-    status: todo.status,
-    endDate: todo.endDate,
+    completed: todo.completed,
+    createdAt: todo.createdAt,
+    updatedAt: todo.updatedAt,
   };
 }
 
 export default {
   createTodo: (req: Request, res: Response) => {
-    db.Todo.create({
-      title: req.body.title,
-      description: req.body.description,
-      userId: req.body.userObject.id,
-      endDate: req.body.endDate,
-    })
-      .then((todo) => {
-        res.send(createTodo(todo));
+    prisma.todo
+      .create({
+        data: {
+          title: req.body.title,
+          completed: false,
+          userId: req.body.userObject.id,
+        },
       })
-      .catch((err) => {
-        res.status(500).send(err);
-      });
-  },
-
-  getTodos: (req: Request, res: Response) => {
-    db.Todo.findAll({
-      where: {
-        userId: req.body.userObject.id,
-      },
-    })
-      .then((todos) => {
-        response.data = {
-          todos: todos.map((todo) => createTodo(todo)),
-        };
+      .then((todo) => {
+        response.data = constructTodo(todo);
         res.send(response);
       })
       .catch((err) => {
@@ -48,34 +36,37 @@ export default {
       });
   },
 
-  updateStatus: (req: Request, res: Response) => {
-    db.Todo.findByPk(req.params.id)
-      .then((todo) => {
-        if (todo === null) throw new Error("Todo with id [" + req.params.id + "] not found");
-        todo.update({
-          status: req.body.status,
-          updatedAt: new Date(),
-        });
-        response.data = { todo: createTodo(todo) };
-        return res.send(response);
+  getTodos: (req: Request, res: Response) => {
+    prisma.todo
+      .findMany({
+        where: {
+          userId: req.body.userObject.id,
+        },
       })
-      .catch((err) => {
-        error.errorMessage = err.message;
-        return res.status(400).send(error);
+      .then((todos) => {
+        response.data = todos.map((todo) => constructTodo(todo));
+        res.send(response);
       });
   },
 
   updateTodo: (req: Request, res: Response) => {
-    db.Todo.findByPk(req.params.id).then((todo) => {
-      if (todo === null) throw new Error("Todo with id [" + req.params.id + "] not found");
-      todo.update({
-        title: req.body.title,
-        description: req.body.description,
-        endDate: req.body.endDate,
-        updatedAt: new Date(),
+    prisma.todo
+      .update({
+        where: {
+          id: Number(req.params.id),
+        },
+        data: {
+          completed: req.body.completed,
+          updatedAt: new Date(),
+        },
+      })
+      .then((todo) => {
+        response.data = { todo: constructTodo(todo) };
+        res.send(response);
+      })
+      .catch((err) => {
+        error.errorMessage = err.message;
+        res.status(500).send(error);
       });
-      response.data = { todo: createTodo(todo) };
-      return res.send(response);
-    });
   },
 };

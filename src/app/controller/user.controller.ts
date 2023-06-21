@@ -10,6 +10,7 @@ const constructUser = (user: User) => {
   return {
     id: user.id,
     email: user.email,
+    active: user.active,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -72,6 +73,8 @@ export default {
         where: { id: Number(req.params.id) },
         data: {
           password,
+          active: req.body.active,
+          updatedAt: new Date(),
         },
       })
       .then((user) => {

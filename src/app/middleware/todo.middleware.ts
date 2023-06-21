@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import joiConfig from "../../config/joi.config";
-import { createTodoScheme, updateStatusScheme, updateTodoScheme } from "../schema/todo.scheme";
+import { createTodoScheme, updateScheme } from "../schema/todo.scheme";
 import error from "../templates/error";
 
 export default {
@@ -13,17 +13,12 @@ export default {
     return next();
   },
 
-  updateStatus: (req: Request, res: Response, next: NextFunction) => {
-    const { error: err } = updateStatusScheme.validate(req.body, joiConfig);
-    if (err) {
-      error.errorMessage = err.message;
-      return res.status(400).send(error);
-    }
-    return next();
-  },
-
   updateTodo: (req: Request, res: Response, next: NextFunction) => {
-    const { error: err } = updateTodoScheme.validate(req.body, joiConfig);
+    if (!req.params.id) {
+      error.errorMessage = "Missing id";
+      return res.send(error);
+    }
+    const { error: err } = updateScheme.validate(req.body, joiConfig);
     if (err) {
       error.errorMessage = err.message;
       return res.status(400).send(error);
