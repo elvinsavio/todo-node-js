@@ -27,7 +27,7 @@ router.post("/", userMiddleware.createUser, userController.createUser);
  * @description
  * Update user
  */
-router.post("/:id", authMiddleware.verifyToken, userMiddleware.updateUser, userController.updateUser);
+router.post("/update", authMiddleware.verifyToken, userMiddleware.updateUser, userController.updateUser);
 
 /**
  * @description

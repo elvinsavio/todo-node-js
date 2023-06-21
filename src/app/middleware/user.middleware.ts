@@ -1,7 +1,7 @@
 import joiConfig from "../../config/joi.config";
 
 import type { NextFunction, Request, Response } from "express";
-import { createUserSchema } from "../model/user/user.schema";
+import { createUserSchema, updateUserSchema } from "../model/user/user.schema";
 
 import error from "../templates/error";
 
@@ -16,11 +16,7 @@ export default {
   },
 
   updateUser(req: Request, res: Response, next: NextFunction) {
-    if (!req.params.id) {
-      error.errorMessage = "Missing id";
-      return res.send(error);
-    }
-    const { error: errBody } = createUserSchema.validate(req.body, joiConfig);
+    const { error: errBody } = updateUserSchema.validate(req.body, joiConfig);
     if (errBody) {
       error.errorMessage = errBody.message;
       return res.status(400).send(error);

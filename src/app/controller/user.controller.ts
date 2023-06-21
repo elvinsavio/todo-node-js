@@ -24,9 +24,10 @@ const userObject = (user: IUserModel) => {
 
 export default {
   createUser: async (req: Request, res: Response) => {
+    const password = await encrypt.cryptPassword(req.body.password);
     db.User.create({
       email: req.body.email,
-      password: await encrypt.cryptPassword(req.body.password),
+      password,
     })
       .then((user: IUserModel) => {
         response.data = { user: userObject(user) };
@@ -62,24 +63,22 @@ export default {
       });
   },
 
-  updateUser: (req: Request, res: Response) => {
-    db.User.findByPk(req.params.id)
-      .then((user) => {
-        if (user === null) {
-          throw new Error("User with id [" + req.params.id + "] not found");
-        }
-        user.update({
-          email: req.body.email,
-          password: req.body.password,
-          updatedAt: new Date(),
-        });
-        response.data = { user };
-        return res.send(response);
-      })
-      .catch((err) => {
-        error.errorMessage = err;
-        res.status(500).send(error);
-      });
+  updateUser: async (req: Request, res: Response) => {
+    const password = await encrypt.cryptPassword(req.body.password);
+
+    db.User.update(
+      {
+        password,
+      },
+      {
+        where: {
+          email: req.body.userObject.email,
+        },
+      },
+    ).then((user) => {
+      response.data = { user };
+      res.send(response);
+    });
   },
 
   toggleUser: (req: Request, res: Response) => {
