@@ -7,11 +7,7 @@ import router from "./app/router/router";
 import { errorLogger, infoLogger } from "./logger/logger";
 const app = express();
 
-const corsOptions = {
-  origin: "http://localhost:8081",
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -23,7 +19,7 @@ app.use("/", router);
 
 db.sequelize
   .sync({
-    force: true,
+    // force: true,
   })
   .then(() => {
     // eslint-disable-next-line no-console
