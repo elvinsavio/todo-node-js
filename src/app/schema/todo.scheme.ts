@@ -8,7 +8,6 @@ export const createTodoScheme = joi.object({
 });
 
 export const updateScheme = joi.object({
-  status: joi.boolean().optional().allow("", null),
-  completed: joi.boolean().optional().allow("", null),
+  status: joi.valid("todo", "doing", "done").required(),
   userObject: joi.object(),
 });
